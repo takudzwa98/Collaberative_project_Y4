@@ -27,7 +27,6 @@ class Fire {
             }
         });
     };
-
     send = messages => {
         messages.forEach(item => {
             const message = {
