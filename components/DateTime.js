@@ -32,7 +32,7 @@ const DateTime = () => {
         </View>
         <View style={styles.rightAlign}>
                  <Text style={styles.timezone}>Dublin,Ireland</Text>
-                 <Text style={styles.latlong}>4.28N 50E </Text>
+                 <Text style={styles.latlong}>4.28N 50E</Text>
             </View>
         </View>    
     )
