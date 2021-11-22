@@ -18,7 +18,7 @@ const DateTime = () => {
        <View style={styles.container}>
             <View>
                  <View>
-                    <Text style={styles.heading}>11:30 AM</Text>
+                    <Text style={styles.heading}>11:39 AM</Text>
                 </View>
                 <View>
                     <Text style={styles.subheading}>Sunday, November 21</Text>
