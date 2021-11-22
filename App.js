@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import DateTime from './components/DateTime'
 import WeatherScroll from './components/WeatherScroll'
 
+
 const img = require('./assets/image.jpg')
 export default function App() {
   return (
