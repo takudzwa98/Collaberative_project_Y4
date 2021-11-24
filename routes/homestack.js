@@ -21,7 +21,8 @@ const screens = {
       screen: Home,
       navigationOptions:({ navigation }) => {
       return {
-        headerTitle: () => null,
+        title: null,
+      header: () => null
             }
       }
   }
