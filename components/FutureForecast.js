@@ -34,6 +34,7 @@ const FutureForecastItem = ({forecastItem}) => {
             <Image source={img} style={styles.image} />
             <Text  style={styles.temp}>Night - {forecastItem.temp.night}&#176;C</Text>
             <Text  style={styles.temp}>Day - {forecastItem.temp.day}&#176;C</Text>
+           
 
         </View>
     )
