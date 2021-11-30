@@ -15,7 +15,7 @@ const WeatherItem = ({title, value, unit}) => {
         )
 }
 
-const DateTime = () => {
+const DateTime = ({current, lat, lon, timezone}) => {
     const [date, setDate] = useState('')
     const [time, setTime] = useState('')
 
@@ -47,15 +47,15 @@ const DateTime = () => {
                     <Text style={styles.subheading}>{date}</Text>
                 </View>
              <View style={styles.weatherItemContainer}>
-                <WeatherItem title ="Humidity" value="78" unit="%"/>
-                <WeatherItem title ="Pressure" value="1000" unit="hpA"/>
-                <WeatherItem title ="Sunrise" value="09:00" unit="am"/>
-                <WeatherItem title ="Sunset" value="06:30" unit="pm"/>
+                <WeatherItem title ="Humidity" value={current? current.humidity: ""} unit="%"/>
+                <WeatherItem title ="Pressure" value={current? current.pressure: ""} unit="hpA"/>
+                <WeatherItem title ="Sunrise" value={current? current.sunrise: ""} unit="am"/>
+                <WeatherItem title ="Sunset" value={current? current.sunset: ""} unit="pm"/>
             </View>
         </View>
         <View style={styles.rightAlign}>
-                 <Text style={styles.timezone}>Dublinnn,Ireland</Text>
-                 <Text style={styles.latlong}>4.28N 50E</Text>
+                 <Text style={styles.timezone}>{timezone}</Text>
+                 <Text style={styles.latlong}>{lat}N  {lon}E</Text>
             </View>
         </View>    
     )
