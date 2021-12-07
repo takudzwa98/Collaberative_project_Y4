@@ -13,7 +13,7 @@ function ProfileScreen()
                          uri:"https://scontent-dub4-1.xx.fbcdn.net/v/t1.6435-9/129762309_2248948631906378_3378543475299026941_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=730e14&_nc_ohc=XhbphQ6zEb8AX83lUpA&_nc_ht=scontent-dub4-1.xx&oh=bb8eddce558c37542b812c5088ad3ca2&oe=61D67DFA"
                         }} />
                     <Text>Oluwatomisin Akingba</Text>
-                    <Text style={{color:'gray',bottom:"7%"}}>Drogheda,Ireland</Text> 
+                    <Text style={{color:'gray',bottom:"7%"}}>Drogheda ,Ireland</Text> 
                  
                  <DataTable>
                     <DataTable.Row>
