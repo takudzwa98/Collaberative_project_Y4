@@ -16,7 +16,7 @@ class Fire {
                 storageBucket: "sideline-3b490.appspot.com",
                 messagingSenderId: "518347707186",
                 appId: "1:518347707186:web:815733cc8e55c9fc83bd2b",
-                measurementId: "G-R959D37G2Z"              
+                measurementId: "G-R959D37G2Z"             
             });
         }
     };
