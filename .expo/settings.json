@@ -3,7 +3,7 @@
   "lanType": "ip",
   "dev": true,
   "minify": false,
-  "urlRandomness": null,
+  "urlRandomness": "k6-m2r",
   "https": false,
   "scheme": null,
   "devClient": false
