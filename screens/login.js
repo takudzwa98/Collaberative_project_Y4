@@ -1,13 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Button, SafeAreaView} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image, Button, SafeAreaView} from 'react-native';
 import Login from '../app/index';
 import { authentication } from "../firebase/firebase-config";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
 
+const backImage = require("../assets/bg1.png");
 
-const login = ({ navigation }) => {
+export default function login ({ navigation }) {
 
   const [email, setEmail] = React.useState("")
   const [password, setPassword] = React.useState("")
@@ -95,28 +96,51 @@ const RegisterUser = () => {
 } 
   
   return(
-    <SafeAreaView>
-    <View>
-      <TextInput
-      onChangeText={setEmail}
-      value = {email}
-      style = {styles.email}
-      >
-      </TextInput>
-
-      <TextInput
-      onChangeText={setPassword}
-      value = {password}
-      style = {styles.password}
-      >
-      </TextInput>
-      <Button style = {styles.button}
+    
+    <View style={styles.container}>
+    <Image source={backImage} style={styles.backImage}></Image>
+      <SafeAreaView style={styles.form}>
+      <Text style={styles.title}>Login</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter Email"
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    textContentType="emailAddress"
+                    autoFocus={true}
+                    value={email}
+                    onChangeText={(text) => setEmail(text)}
+                />
+                  <TextInput 
+                    style={styles.input}
+                    placeholder="Enter Password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={true}
+                    textContentType="password"
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
+                />
+        <Button style = {styles.button}
          title='Send'
          onPress={SignInUser}
         >
         </Button>
+        <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
+                <Text style={{color: 'gray', fontWeight: '600', fontSize: 14}}>
+                  Dont have an account? 
+                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+                    <Text style={{color: '#f57c00', fontWeight: '600', fontSize: 14}}>
+                      Sign Up
+                    </Text>
+                </TouchableOpacity>
+            </View>
+      </SafeAreaView>
+     
+
     </View>
-    </SafeAreaView>
+    
    )
 }
 
@@ -146,9 +170,53 @@ const styles = StyleSheet.create({
     elevation: 3,
     backgroundColor: 'black',
   },
-
+  button: {
+    backgroundColor: '#f57c00',
+    height: 58,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
+},
+form: {
+    flex: 1,
+    justifyContent:'center',
+    marginHorizontal: 30
+},
+whiteSheet: {
+    width: '100%',
+    height: '75%',
+    position: "absolute",
+    bottom: 0,
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 60
+},
+backImage: {
+    width: '100%',
+    height: 340,
+    position: "absolute",
+    top: 0,
+    resizeMode: 'cover'
+},
+input: {
+    backgroundColor: "#F6F7FB",
+    height: 58,
+    marginBottom: 20,
+    fontSize: 16,
+    borderRadius: 10,
+    padding: 12
+},
+title: {
+    fontSize: 36,
+    fontWeight: "bold",
+    color: "orange",
+    alignSelf: "center",
+    paddingBottom: 24
+},
+container: {
+    flex: 1,
+    backgroundColor: '#fff'
+}
 
 });
 
-
-export default login;

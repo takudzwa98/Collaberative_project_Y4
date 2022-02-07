@@ -99,53 +99,6 @@ const Tab = createBottomTabNavigator();
 // Hiding Tab Names...
 export default function Home ({navigation}) {
    
-const [messages, setMessages] = useState([]);
-const onsignOut = () => {
-  signOut(auth).catch(error => console.log(error));
-};
-
-useLayoutEffect(() => {
-  navigation.setOptions({
-      headerRight: () => (
-          <TouchableOpacity
-           style={{marginRight: 10}}
-           onPress={onsignOut}
-          >
-              <AntDesign name="logout" size={24} color={colors.gray} style={{marginRight: 10}}/>
-          </TouchableOpacity>
-      )
-  });
-}, [navigation]);
-
-useLayoutEffect(() => {
-  const collectionRef = collection(db, 'chats');
-  const q = query(collectionRef, orderBy('createdAt', 'desc'));
-
-  const unsubscribe = onSnapshot(q, snapshot => {
-      console.log('snapshot');
-      setMessages(
-          snapshot.docs.map(doc => ({
-              _id: doc.id,
-              createdAt: doc.data().createdAt,
-              text: doc.data().text,
-              user: doc.data().user
-          }))
-      )
-  });
-  return () => unsubscribe
-}, []);
-
-const onSend = useCallback((messages = []) => {
-  setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
-
-  const { _id, createdAt, text, user } = messages[0];
-  addDoc(collection(db, 'chats'), {
-      _id,
-      createdAt,
-      text,
-      user
-  });
-}, []);
 
   // Animated Tab Indicator...
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
@@ -416,8 +369,43 @@ function HomeScreen() {
 }
 
 function NotificationScreen() {
+  const [messages, setMessages] = useState([]);
+const onsignOut = () => {
+  signOut(auth).catch(error => console.log(error));
+};
+
+useLayoutEffect(() => {
+  const collectionRef = collection(db, 'chats');
+  const q = query(collectionRef, orderBy('createdAt', 'desc'));
+
+  const unsubscribe = onSnapshot(q, snapshot => {
+      console.log('snapshot');
+      setMessages(
+          snapshot.docs.map(doc => ({
+              _id: doc.id,
+              createdAt: doc.data().createdAt,
+              text: doc.data().text,
+              user: doc.data().user
+          }))
+      )
+  });
+  return () => unsubscribe
+}, []);
+
+const onSend = useCallback((messages = []) => {
+  setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
+
+  const { _id, createdAt, text, user } = messages[0];
+  addDoc(collection(db, 'chats'), {
+      _id,
+      createdAt,
+      text,
+      user
+  });
+}, []);
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+   
       <GiftedChat 
             messages={messages}
             onSend={messages => onSend(messages)}
@@ -429,7 +417,7 @@ function NotificationScreen() {
                 backgroundColor: '#fff'
             }}
         />
-    </View>
+    
   );
 }
 
