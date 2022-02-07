@@ -221,7 +221,7 @@ export default function Home ({navigation}) {
           }
         })}></Tab.Screen>
 
-        <Tab.Screen name={"Settings"} component={SettingsScreen} options={{
+        <Tab.Screen name={"Profile"} component={SettingsScreen} options={{
           tabBarIcon: ({ focused }) => (
             <View style={{
               // centring Tab Button...
@@ -293,10 +293,10 @@ function SettingsScreen() {
                 }} />
                 <View style={styles.bottomContainer}>
                      <Image style={styles.profile} source={{
-                         uri:"https://scontent-dub4-1.xx.fbcdn.net/v/t1.6435-9/129762309_2248948631906378_3378543475299026941_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=730e14&_nc_ohc=XhbphQ6zEb8AX83lUpA&_nc_ht=scontent-dub4-1.xx&oh=bb8eddce558c37542b812c5088ad3ca2&oe=61D67DFA"
+                         uri:"https://scontent-dub4-1.xx.fbcdn.net/v/t1.6435-9/129762309_2248948631906378_3378543475299026941_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=730e14&_nc_ohc=2B_hQvCwpmIAX9MugRz&_nc_ht=scontent-dub4-1.xx&oh=00_AT-sH4iXtzbGJRdU7GG5W1uIY-FCG6sVBRCLjzo9zxKJvA&oe=622597FA"
                         }} />
-                    <Text>Oluwatomisin Akingba</Text>
-                    <Text style={{color:'gray',bottom:"7%"}}>Drogheda ,Ireland</Text> 
+                    <Text style={{color:'gray', marginTop:-25}}>Oluwatomisin Akingba</Text>
+                    <Text style={{color:'gray',bottom:"7%", marginTop:10}}>Drogheda ,Ireland</Text> 
                  
                  <DataTable>
                     <DataTable.Row>
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
 },
 bottomContainer:{marginTop:"50%", height:"90%", width:400, backgroundColor:'white', borderTopStartRadius: 50, borderTopEndRadius:50, alignItems:'center' },
 profile:{
-    height:120,
+    height:180,
     width:120, 
     borderRadius: 25,
     bottom:"10%"
