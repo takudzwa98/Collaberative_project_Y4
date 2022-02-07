@@ -1,15 +1,15 @@
 import React from 'react'; 
-import {View, Image, Text, StyleSheet, ScrollView} from 'react-native'; 
-import { DataTable } from 'react-native-paper';
+import {View, Text, StyleSheet} from 'react-native'; 
 function ProfileScreen()
 {
     return (
         <View style={styles.containerImage}>
+
             <Text>Opponent: DCU Football Club</Text>
             <Text>Venue: DkIT Football Pitch</Text>
             <Text>Date: 12/01/2022</Text>
             <Text>Weather:API? </Text>
-            
+
         </View>
     );
 }

@@ -7,7 +7,9 @@ function ProfileScreen()
         <View style={}>
             <Text>Thursday Training Session</Text>
             <Text>Venue: DkIT Sports Indoor Facility</Text>
-            <Text>Time: 7:30pm</Text> 
+            <Text>Streght and Conditioning</Text> 
+            <Text>Time: 7:30pm</Text>
+            
         
         <View style={{ flexDirection:"row" }}>
         <View style={styles.buttonStyle}>
