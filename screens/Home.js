@@ -1,10 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, {  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback } from 'react';
 import { Animated, Dimensions, FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import 'react-native-gesture-handler';
 import { DataTable } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { GiftedChat } from "react-native-gifted-chat";
+import {
+    collection,
+    addDoc,
+    orderBy,
+    query,
+    onSnapshot
+} from 'firebase/firestore';
+import { signOut } from "firebase/auth";
+import { auth, db } from "../firebase/firebase-config";
+import { useNavigation } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
+import colors from "../colors";
 // Plus...
 import plus from '../assets/plus.png'
 
@@ -18,6 +34,7 @@ import PostCard from '../components/PostCard';
 import {
   Container,
 } from '../styles/FeedStyles';
+
 
 const Posts = [
   {
@@ -82,6 +99,54 @@ const Tab = createBottomTabNavigator();
 // Hiding Tab Names...
 export default function Home ({navigation}) {
    
+const [messages, setMessages] = useState([]);
+const onsignOut = () => {
+  signOut(auth).catch(error => console.log(error));
+};
+
+useLayoutEffect(() => {
+  navigation.setOptions({
+      headerRight: () => (
+          <TouchableOpacity
+           style={{marginRight: 10}}
+           onPress={onsignOut}
+          >
+              <AntDesign name="logout" size={24} color={colors.gray} style={{marginRight: 10}}/>
+          </TouchableOpacity>
+      )
+  });
+}, [navigation]);
+
+useLayoutEffect(() => {
+  const collectionRef = collection(db, 'chats');
+  const q = query(collectionRef, orderBy('createdAt', 'desc'));
+
+  const unsubscribe = onSnapshot(q, snapshot => {
+      console.log('snapshot');
+      setMessages(
+          snapshot.docs.map(doc => ({
+              _id: doc.id,
+              createdAt: doc.data().createdAt,
+              text: doc.data().text,
+              user: doc.data().user
+          }))
+      )
+  });
+  return () => unsubscribe
+}, []);
+
+const onSend = useCallback((messages = []) => {
+  setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
+
+  const { _id, createdAt, text, user } = messages[0];
+  addDoc(collection(db, 'chats'), {
+      _id,
+      createdAt,
+      text,
+      user
+  });
+}, []);
+
   // Animated Tab Indicator...
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   return (
@@ -353,7 +418,17 @@ function HomeScreen() {
 function NotificationScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Notifications!</Text>
+      <GiftedChat 
+            messages={messages}
+            onSend={messages => onSend(messages)}
+            user={{
+                _id: auth?.currentUser?.email,
+                avatar: 'https://www.flaticon.com/premium-icon/man_2202112?term=avatar&page=1&position=1&page=1&position=1&related_id=2202112&origin=tag'
+            }}
+            messagesContainerStyle={{
+                backgroundColor: '#fff'
+            }}
+        />
     </View>
   );
 }

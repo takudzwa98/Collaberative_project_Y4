@@ -14,6 +14,7 @@ const firebaseconfig = {
 };
 
 const app = firebase.initializeApp(firebaseconfig);
+export const auth = getAuth(app);
 export const authentication = getAuth(app);
 export const db = getFirestore(app);
 export const referenceSupport = doc(db, 'users/21-01-2022');
