@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "expo": "^43.0.3",
+    "expo": "^43.0.5",
+    "expo-location": "^14.0.2",
     "react-native": "^0.66.3",
     "react-native-awesome-table": "^1.0.4",
     "react-native-paper": "^4.10.1",
