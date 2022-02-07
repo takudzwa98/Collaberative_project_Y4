@@ -1,150 +1,332 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, FlatList } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import moment from "moment";
+import { StatusBar } from 'expo-status-bar';
+import React, { useState, useEffect } from 'react';
+import { Animated, Dimensions, FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+// Plus...
+import plus from '../assets/plus.png'
 
-// temporary data until we pull from Firebase
-posts = [
-    {
-        id: "1",
-        name: "Joe McKay",
-        text:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        timestamp: 1569109273726,
-        avatar: require("../assets/user-2.jpg"),
-        image: require("../assets/user-3.jpg")
-    },
-    {
-        id: "2",
-        name: "Karyn Kim",
-        text:
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        timestamp: 1569109273726,
-        avatar: require("../assets/user-2.jpg"),
-        image: require("../assets/user-3.jpg")
-    },
-    {
-        id: "3",
-        name: "Emerson Parsons",
-        text:
-            "Amet mattis vulputate enim nulla aliquet porttitor lacus luctus. Vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant.",
-        timestamp: 1569109273726,
-        avatar: require("../assets/user-2.jpg"),
-        image: require("../assets/user-3.jpg")
-    },
-    {
-        id: "4",
-        name: "Kathie Malone",
-        text:
-            "At varius vel pharetra vel turpis nunc eget lorem. Lorem mollis aliquam ut porttitor leo a diam sollicitudin tempor. Adipiscing tristique risus nec feugiat in fermentum.",
-        timestamp: 1569109273726,
-        avatar: require("../assets/user-2.jpg"),
-        image: require("../assets/user-3.jpg")
-    }
+// Font Awesome Icons...
+import { FontAwesome5 } from '@expo/vector-icons'
+import { useRef } from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import PostCard from '../components/PostCard';
+
+import {
+  Container,
+} from '../styles/FeedStyles';
+
+const Posts = [
+  {
+    id: '1',
+    userName: 'Jenny Doe',
+    userImg: require('../assets/users/user-3.jpg'),
+    postTime: '4 mins ago',
+    post: 'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: require('../assets/posts/post-img-3.jpg'),
+    liked: true,
+    likes: '14',
+    comments: '5'
+  },
+  {
+    id: '2',
+    userName: 'John Doe',
+    userImg: require('../assets/users/user-1.jpg'),
+    postTime: '2 hours ago',
+    post: 'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: 'none',
+    liked: false,
+    likes: '8',
+    comments: '0'
+  },
+  {
+    id: '3',
+    userName: 'Ken William',
+    userImg: require('../assets/users/user-4.jpg'),
+    postTime: '1 hours ago',
+    post: 'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: require('../assets/posts/post-img-2.jpg'),
+    liked: true,
+    likes: '1',
+    comments: '0'
+  },
+  {
+    id: '4',
+    userName: 'Selina Paul',
+    userImg: require('../assets/users/user-6.jpg'),
+    postTime: '1 day ago',
+    post: 'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: require('../assets/posts/post-img-4.jpg'),
+    liked: true,
+    likes: '22',
+    comments: '4'
+  },
+  {
+    id: '5',
+    userName: 'Christy Alex',
+    userImg: require('../assets/users/user-7.jpg'),
+    postTime: '2 days ago',
+    post: 'Hey there, this is my test for a post of my social app in React Native.',
+    postImg: 'none',
+    liked: false,
+    likes: '0',
+    comments: '0'
+  },
 ];
 
-export default class HomeScreen extends React.Component {
-    renderPost = post => {
-        return (
-            <View style={styles.feedItem}>
-                <Image source={post.avatar} style={styles.avatar} />
-                <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                        <View>
-                            <Text style={styles.name}>{post.name}</Text>
-                            <Text style={styles.timestamp}>{moment(post.timestamp).fromNow()}</Text>
-                        </View>
+const Tab = createBottomTabNavigator();
 
-                        <Ionicons name="ios-more" size={24} color="#73788B" />
-                    </View>
-                    <Text style={styles.post}>{post.text}</Text>
-                    <Image source={post.image} style={styles.postImage} resizeMode="cover" />
-                    <View style={{ flexDirection: "row" }}>
-                        <Ionicons name="ios-heart-empty" size={24} color="#73788B" style={{ marginRight: 16 }} />
-                        <Ionicons name="ios-chatboxes" size={24} color="#73788B" />
-                    </View>
-                </View>
+// Hiding Tab Names...
+export default function Home ({navigation}) {
+   
+  // Animated Tab Indicator...
+  const tabOffsetValue = useRef(new Animated.Value(0)).current;
+  return (
+    <NavigationContainer>
+      <Tab.Navigator tabBarOptions={{
+        showLabel: false,
+        // Floating Tab Bar...
+        style: {
+          backgroundColor: 'white',
+          position: 'absolute',
+          bottom: 0,
+          marginHorizontal: 20,
+          // Max Height...
+          height: 60,
+          borderRadius: 10,
+          // Shadow...
+          shadowColor: '#000',
+          shadowOpacity: 0.06,
+          shadowOffset: {
+            width: 10,
+            height: 10
+          },
+          paddingHorizontal: 20,
+        }
+      }}>
+
+        {
+          // Tab Screens....
+
+          // Tab ICons....
+        }
+        <Tab.Screen name={"Home"} component={HomeScreen} options={{
+          tabBarIcon: ({ focused }) => (
+            <View style={{
+              // centring Tab Button...
+              left: 55,
+              position: 'absolute',
+              top: 20
+            }}>
+              <FontAwesome5
+                name="home"
+                size={20}
+                color={focused ? 'red' : 'gray'}
+              ></FontAwesome5>
             </View>
-        );
-    };
+          )
+        }} listeners={({ navigation, route }) => ({
+          // Onpress Update....
+          tabPress: e => {
+            Animated.spring(tabOffsetValue, {
+              toValue: 0,
+              useNativeDriver: true
+            }).start();
+          }
+        })}></Tab.Screen>
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Feed</Text>
-                </View>
-
-                <FlatList
-                    style={styles.feed}
-                    data={posts}
-                    renderItem={({ item }) => this.renderPost(item)}
-                    keyExtractor={item => item.id}
-                    showsVerticalScrollIndicator={false}
-                ></FlatList>
+        <Tab.Screen name={"Search"} component={SearchScreen} options={{
+          tabBarIcon: ({ focused }) => (
+            <View style={{
+              // centring Tab Button...
+              left: 45,
+              position: 'absolute',
+              top: 20
+            }}>
+              <FontAwesome5
+                name="search"
+                size={20}
+                color={focused ? 'red' : 'gray'}
+              ></FontAwesome5>
             </View>
-        );
-    }
+          )
+        }} listeners={({ navigation, route }) => ({
+          // Onpress Update....
+          tabPress: e => {
+            Animated.spring(tabOffsetValue, {
+              toValue: getWidth(),
+              useNativeDriver: true
+            }).start();
+          }
+        })}></Tab.Screen>
+
+
+        {
+
+          // Extra Tab Screen For Action Button..
+        }
+
+        <Tab.Screen name={"ActionButton"} component={EmptyScreen} options={{
+          tabBarIcon: ({ focused }) => (
+
+            <TouchableOpacity onPress={() => {
+                navigation.navigate("AddPost")
+            }}>
+              <View style={{
+                width: 55,
+                height: 55,
+                backgroundColor: 'red',
+                borderRadius: 30,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: Platform.OS == "android" ? 50 : 30
+              }}>
+                <Image source={plus} style={{
+                  width: 22,
+                  height: 22,
+                  tintColor: 'white',
+                  
+                }}></Image>
+              </View>
+              
+            </TouchableOpacity>
+          )
+        }}></Tab.Screen>
+
+        <Tab.Screen name={"Notifications"} component={NotificationScreen} options={{
+          tabBarIcon: ({ focused }) => (
+            <View style={{
+              // centring Tab Button...
+              right:45,
+              position: 'absolute',
+              top: 20
+            }}>
+              <FontAwesome5
+                name="bell"
+                size={20}
+                color={focused ? 'red' : 'gray'}
+              ></FontAwesome5>
+            </View>
+          )
+        }} listeners={({ navigation, route }) => ({
+          // Onpress Update....
+          tabPress: e => {
+            Animated.spring(tabOffsetValue, {
+              toValue: getWidth() * 3,
+              useNativeDriver: true
+            }).start();
+          }
+        })}></Tab.Screen>
+
+        <Tab.Screen name={"Settings"} component={SettingsScreen} options={{
+          tabBarIcon: ({ focused }) => (
+            <View style={{
+              // centring Tab Button...
+              right:55,
+              position: 'absolute',
+              top: 20
+            }}>
+              <FontAwesome5
+                name="user-alt"
+                size={20}
+                color={focused ? 'red' : 'gray'}
+              ></FontAwesome5>
+            </View>
+          )
+        }} listeners={({ navigation, route }) => ({
+          // Onpress Update....
+          tabPress: e => {
+            Animated.spring(tabOffsetValue, {
+              toValue: getWidth() * 4,
+              useNativeDriver: true
+            }).start();
+          }
+        })}></Tab.Screen>
+
+      </Tab.Navigator>
+
+      <Animated.View style={{
+        width: getWidth() - 5,
+        height: 3,
+        backgroundColor: 'red',
+        position: 'absolute',
+        bottom: 55,
+        // Horizontal Padding = 20...
+        left: 40,
+        borderRadius: 30,
+        transform: [
+          { translateX: tabOffsetValue }
+        ]
+      }}>
+
+      </Animated.View>
+    </NavigationContainer>
+  );
+}
+
+function getWidth() {
+  let width = Dimensions.get("window").width
+
+  // Horizontal Padding = 20...
+  width = width - 80
+
+  // Total five Tabs...
+  return width / 5
+}
+
+function EmptyScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    </View>
+  );
+}
+
+function SettingsScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings!</Text>
+    </View>
+  );
+}
+
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Container>
+      <FlatList 
+        data={Posts}
+        renderItem={({item}) => <PostCard item={item} />}
+        keyExtractor={item=>item.id}
+        showsVerticalScrollIndicator={false}
+      />
+    </Container>
+  </View>
+  );
+}
+
+function NotificationScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Notifications!</Text>
+    </View>
+  );
+}
+
+function SearchScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Search!</Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#EBECF4"
-    },
-    header: {
-        paddingTop: 64,
-        paddingBottom: 16,
-        backgroundColor: "#FFF",
-        alignItems: "center",
-        justifyContent: "center",
-        borderBottomWidth: 1,
-        borderBottomColor: "#EBECF4",
-        shadowColor: "#454D65",
-        shadowOffset: { height: 5 },
-        shadowRadius: 15,
-        shadowOpacity: 0.2,
-        zIndex: 10
-    },
-    headerTitle: {
-        fontSize: 20,
-        fontWeight: "500"
-    },
-    feed: {
-        marginHorizontal: 16
-    },
-    feedItem: {
-        backgroundColor: "#FFF",
-        borderRadius: 5,
-        padding: 8,
-        flexDirection: "row",
-        marginVertical: 8
-    },
-    avatar: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        marginRight: 16
-    },
-    name: {
-        fontSize: 15,
-        fontWeight: "500",
-        color: "#454D65"
-    },
-    timestamp: {
-        fontSize: 11,
-        color: "#C4C6CE",
-        marginTop: 4
-    },
-    post: {
-        marginTop: 16,
-        fontSize: 14,
-        color: "#838899"
-    },
-    postImage: {
-        width: undefined,
-        height: 150,
-        borderRadius: 5,
-        marginVertical: 16
-    }
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
